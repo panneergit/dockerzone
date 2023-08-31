@@ -6,4 +6,4 @@ RUN wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-pe
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "/spc.jar"]
+CMD ["java", "-jar", "spc.jar"]

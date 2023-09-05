@@ -1,4 +1,4 @@
-FROM amazoncorretto:11
+FROM amazoncorretto:11-alpine-jdk
 
 LABEL author="Panneer"
 LABEL orgination="STS"
@@ -12,7 +12,7 @@ USER petspc
 
 WORKDIR /petspc
 
-ADD https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar /petspc/spring-petclinic-2.4.2.jar
+ADD --chown=petspc:petspc https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar /petspc/spring-petclinic-2.4.2.jar
 
 EXPOSE 8080
 

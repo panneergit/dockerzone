@@ -1,25 +1,16 @@
-FROM amazoncorretto:11-alpine-jdk
+FROM maven:3-amazoncorretto-17 AS builder
+COPY . /spring-petclinic
+RUN  cd /spring-petclinic && mvn package
 
+FROM amazoncorretto:17-alpine3.17
 LABEL author="Panneer"
 LABEL orgination="STS"
-
-ARG DOWNLOAD_LOCATION="https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar"
 ARG USERNAME="petspc"
 ARG HOMEDIR="/petspc"
-
 ENV TESTENV=petspcenv
-
-###RUN curl -fsSL https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/spring-petclinic-2.4.2.jar -o spring-petclinic-2.4.2.jar
-###RUN mkdir /petspc
-
 RUN adduser -h ${HOMEDIR} -s /bin/sh -D ${USERNAME}
-
 USER ${USERNAME}
-
 WORKDIR ${HOMEDIR}
-
-ADD --chown=${USERNAME}:${USERNAME} ${DOWNLOAD_LOCATION} ${HOMEDIR}/spring-petclinic-2.4.2.jar
-
+COPY --from=builder --chown=${USERNAME}:${USERNAME} /spring-petclinic/target/spring-petclinic-3.1.0-SNAPSHOT.jar "${HOMEDIR}/spring-petclinic-3.1.0-SNAPSHOT.jar"
 EXPOSE 8080
-
-CMD [ "java", "-jar", "spring-petclinic-2.4.2.jar" ]
+CMD [ "java", "-jar", "spring-petclinic-3.1.0-SNAPSHOT.jar" ]
